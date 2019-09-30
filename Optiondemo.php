@@ -22,7 +22,7 @@
 		 */
 		public function __construct() {
 			add_action( 'init', array( $this, 'cbx_custom_post_type' ) );
-			add_action( 'init', array( $this, 'ClassInitiat' ) );
+			add_action( 'init', array( $this, 'ClassInitiate' ) );
 			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
 		}
 		//End method constructor
@@ -48,7 +48,10 @@
 		//End method cbx_custom_post_type
 		
 		
-		public function ClassInitiat() {
+		/**
+		 * Class Initiate
+		 */
+		public function ClassInitiate() {
 			require( "inc/Metabox.php" );
 			require( "inc/SettingOptions.php" );
 		}
