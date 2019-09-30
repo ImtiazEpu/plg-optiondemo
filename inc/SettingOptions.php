@@ -1,40 +1,21 @@
 <?php
 	
+	/**
+	 * Kick-in Class SettingOptions
+	 */
 	class SettingOptions {
-		public function __construct(  ) {
-			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
+	 
+		/**
+		 * SettingOptions constructor.
+		 */
+		public function __construct() {
 			add_action( 'admin_menu', array( $this, 'optionsdemo_create_settings' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'optionsdemo_assets' ) );
 			//setting hooks
 			add_action( 'admin_init', array( $this, 'optionsdemo_setup_sections' ) );
 			add_action( 'admin_init', array( $this, 'optionsdemo_setup_fields' ) );
 		}
+		//End method constructor
 		
-		/**
-		 * Load Text Domain
-		 */
-		public function optionsdemo_load_textdomain() {
-			load_plugin_textdomain( 'optionsdemo', false, dirname( __FILE__ ) . "/languages" );
-		}
-		//end method optionsdemo_load_textdomain
-		
-		
-		/**
-		 * Enqueue admin assets
-		 */
-		public function optionsdemo_assets() {
-			$page = isset( $_REQUEST['page'] ) ? esc_attr( wp_unslash( $_REQUEST['page'] ) ) : '';
-			
-			if ( $page == 'optionsdemo' ) {
-				wp_register_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
-					array( 'jquery' ), '1.0', true );
-				
-				wp_enqueue_script( 'jquery' );
-				wp_enqueue_media();
-				wp_enqueue_script( 'customscript-js' );
-			}
-		}
-		// End method optionsdemo_assets
 		/**
 		 * Initial settings
 		 */
@@ -46,7 +27,7 @@
 			$slug        = 'optionsdemo';
 			$callback    = array( $this, 'optionsdemo_settings_content' );
 			
-			//add submenu to setting menu
+			//add submenu to custom post
 			add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $slug, $callback );
 		}
 		
@@ -58,10 +39,10 @@
 		 */
 		public
 		function optionsdemo_settings_content() { ?>
-			<div class="wrap">
-				<div id="icon-themes" class="icon32"><br/></div>
-				<h1>Options Demo</h1>
-				<form action="options.php" method="POST">
+            <div class="wrap">
+                <div id="icon-themes" class="icon32"><br/></div>
+                <h1>Options Demo</h1>
+                <form action="options.php" method="POST">
 					<?php
 						settings_fields( "optionsdemo_general" );
 						do_settings_sections( "optionsdemo_general" );
@@ -69,8 +50,8 @@
 						
 						submit_button( esc_html__( 'Save Setting', 'optionsdemo' ) )
 					?>
-				</form>
-			</div>
+                </form>
+            </div>
 		<?php }
 		
 		//end method optionsdemo_settings_content
@@ -442,4 +423,5 @@
 		}
 		// End method optionsdemo_field_callback
 	}
+	
 	new SettingOptions();

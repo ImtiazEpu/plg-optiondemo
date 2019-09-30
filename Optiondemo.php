@@ -24,6 +24,7 @@
 			add_action( 'init', array( $this, 'cbx_custom_post_type' ) );
 			add_action( 'init', array( $this, 'ClassInitiate' ) );
 			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'optionsdemo_assets' ) );
 		}
 		//End method constructor
 		
@@ -64,6 +65,23 @@
 			load_plugin_textdomain( 'optionsdemo', false, dirname( __FILE__ ) . "/languages" );
 		}
 		//end method optionsdemo_load_textdomain
+		
+		/**
+		 * Enqueue admin assets
+		 */
+		public function optionsdemo_assets() {
+			$page = isset( $_REQUEST['page'] ) ? esc_attr( wp_unslash( $_REQUEST['page'] ) ) : '';
+			
+			if ( $page == 'optionsdemo' ) {
+				wp_register_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
+					array( 'jquery' ), '1.0', true );
+				
+				wp_enqueue_script( 'jquery' );
+				wp_enqueue_media();
+				wp_enqueue_script( 'customscript-js' );
+			}
+		}
+		// End method optionsdemo_assets
 		
 	}//end OptionDemo_Setting_Page class
 	

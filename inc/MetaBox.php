@@ -1,21 +1,17 @@
 <?php
 	
-	
+	/**
+	 * Kick-in Class MetaBox
+	 */
 	class MetaBox {
+		/**
+		 * MetaBox constructor.
+		 */
 		public function __construct() {
-			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
-			
 			add_action( 'admin_menu', array( $this, 'cbx_add_metabox' ) );
 			add_action( 'save_post', array( $this, 'cbx_save_metabox' ) );
 		}
-		
-		/**
-		 * Load Text Domain
-		 */
-		public function optionsdemo_load_textdomain() {
-			load_plugin_textdomain( 'optionsdemo', false, dirname( __FILE__ ) . "/languages" );
-		}
-		//end method optionsdemo_load_textdomain
+		//End method constructor
 		
 		/**
 		 * Add metabox
@@ -89,7 +85,7 @@
 			$select_color   = __( 'Favorite Color', 'optionsdemo' );
 			$select_colors  = __( 'Favorite Colors', 'optionsdemo' );
 			
-			$colors = [
+			$colors  = [
 				'red',
 				'green',
 				'blue',
@@ -98,7 +94,7 @@
 				'pink',
 				'black'
 			];
-			$checked     = $is_favorite == 1 ? 'checked' : '';
+			$checked = $is_favorite == 1 ? 'checked' : '';
 			
 			$metabox_html = <<<EOD
 			<!--Text field-->
