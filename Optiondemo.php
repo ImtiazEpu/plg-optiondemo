@@ -73,12 +73,9 @@
 			$page = isset( $_REQUEST['page'] ) ? esc_attr( wp_unslash( $_REQUEST['page'] ) ) : '';
 			
 			if ( $page == 'optionsdemo' ) {
-				wp_register_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
-					array( 'jquery' ), '1.0', true );
-				
-				wp_enqueue_script( 'jquery' );
 				wp_enqueue_media();
-				wp_enqueue_script( 'customscript-js' );
+				wp_enqueue_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
+					array( 'jquery' ), '1.0.0', true );
 			}
 		}
 		// End method optionsdemo_assets
