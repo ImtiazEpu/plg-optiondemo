@@ -21,7 +21,7 @@
 		 * OptionDemo_Setting_Page constructor.
 		 */
 		public function __construct() {
-			add_action( 'init', array( $this, 'cbx_custom_post_type' ) );
+			add_action( 'init', array( $this, 'opd_custom_post_type' ) );
 			add_action( 'init', array( $this, 'ClassInitiate' ) );
 			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'optionsdemo_assets' ) );
@@ -32,7 +32,7 @@
 		/**
 		 * Register Custom Post Type
 		 */
-		public function cbx_custom_post_type() {
+		public function opd_custom_post_type() {
 			register_post_type( 'optiondemo',
 				array(
 					'labels'      => array(
@@ -46,7 +46,7 @@
 			);
 		}
 		
-		//End method cbx_custom_post_type
+		//End method opd_custom_post_type
 		
 		
 		/**
