@@ -2,12 +2,13 @@
 	
 	
 	class MetaBox {
-		public function __construct(  ) {
+		public function __construct() {
 			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
 			
 			add_action( 'admin_menu', array( $this, 'cbx_add_metabox' ) );
 			add_action( 'save_post', array( $this, 'cbx_save_metabox' ) );
 		}
+		
 		/**
 		 * Load Text Domain
 		 */
@@ -15,6 +16,7 @@
 			load_plugin_textdomain( 'optionsdemo', false, dirname( __FILE__ ) . "/languages" );
 		}
 		//end method optionsdemo_load_textdomain
+		
 		/**
 		 * Add metabox
 		 */
@@ -43,6 +45,7 @@
 			$is_favorite = isset( $_POST['cbx_is_favorite'] ) ? $_POST['cbx_is_favorite'] : 0;
 			$colors      = isset( $_POST['cbx_color'] ) ? $_POST['cbx_color'] : array();
 			$color       = isset( $_POST['cbx_clr'] ) ? $_POST['cbx_clr'] : '';
+			$fav_color   = isset( $_POST['cbx_fav_color'] ) ? $_POST['cbx_fav_color'] : '';
 			
 			
 			$text_field  = sanitize_text_field( $text_field );
@@ -54,6 +57,7 @@
 			update_post_meta( $post_id, '_cbx_is_favorite', $is_favorite );
 			update_post_meta( $post_id, '_cbx_color', $colors );
 			update_post_meta( $post_id, '_cbx_clr', $color );
+			update_post_meta( $post_id, '_cbx_fav_color', $fav_color );
 			
 			
 		}
@@ -74,12 +78,15 @@
 			$checked     = $is_favorite == 1 ? 'checked' : '';
 			$save_colors = get_post_meta( $post_id, '_cbx_color', true );
 			$save_color  = get_post_meta( $post_id, '_cbx_clr', true );
+			$fav_color  = get_post_meta( $post_id, '_cbx_fav_color', true );
 			
 			$text_label     = __( 'Text field', 'optionsdemo' );
 			$email_label    = __( 'Email field', 'optionsdemo' );
 			$checkbox_label = __( 'Is Favorite', 'optionsdemo' );
 			$color_label    = __( 'Colors', 'optionsdemo' );
-			$colors         = [
+			$select_color   = __( 'Favorite Color', 'optionsdemo' );
+			
+			$colors = [
 				'red',
 				'green',
 				'blue',
@@ -141,8 +148,33 @@ EOD;
 EOD;
 			}
 			
+			$metabox_html .= "</p>";
+			
+			$dropdown_html = '<option value="0">' . __( "Select a color", "optionsdemo" ) . '</option>';
+			foreach ( $colors as $color ) {
+				$selected      = '';
+				if ($color == $fav_color){
+					$selected ='selected';
+				}
+				$dropdown_html .= sprintf( '<option value="%s" %s>%s</option>', $color, $selected, $color );
+			}
+			
+			$metabox_html .= <<<EOD
+			<br/>
+			<p>
+				<label for="cbx_fav_color">{$select_color}</label>
+				<select name="cbx_fav_color" id="cbx_fav_color">
+					{$dropdown_html}
+				</select>
+			</p>
+EOD;
+			
+			
 			echo $metabox_html;
+			
+			
 		}
 		//End method cbx_display_meta_field_location
 	}
+	
 	new MetaBox();
