@@ -12,6 +12,7 @@
 		public function __construct() {
 			add_action( 'admin_menu', array( $this, 'opd_add_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_metabox' ) );
+			add_action( 'save_post', array( $this, 'opd_save_img_metabox' ) );
 		}
 		//End method constructor
 		
@@ -26,8 +27,32 @@
 				array( $this, 'opd_display_meta_field_location' ),
 				array( 'optiondemo' )
 			);
+			add_meta_box(
+				'opd_meta_img_field',
+				__( 'Image Field', 'optionsdemo' ),
+				array( $this, 'opd_display_meta_img_field_location' ),
+				array( 'optiondemo' )
+			);
 		}
 		//End method opd_add_metabox
+		
+		
+		/**
+		 * Save image meta value
+		 *
+		 * @param $post_id
+		 */
+		public function opd_save_img_metabox( $post_id ) {
+			$opdimg      = isset( $_POST['opdimg'] ) ? $_POST['opdimg'] : array();
+			$opd_img_id  = isset( $opdimg['opd_image_id'] ) ? $opdimg['opd_image_id'] : '';
+			$opd_img_url = isset( $opdimg['opd_image_url'] ) ? $opdimg['opd_image_url'] : '';
+			
+			$opdimg_id_url                  = array();
+			$opdimg_id_url['opd_image_id']  = $opd_img_id;
+			$opdimg_id_url['opd_image_url'] = $opd_img_url;
+			
+			update_post_meta( $post_id, '_opd_img_id_url', $opdimg_id_url );
+		}
 		
 		
 		/**
@@ -51,11 +76,11 @@
 			$text_field  = sanitize_text_field( $text_field );
 			$email_field = sanitize_text_field( $email_field );
 			
-			$multi_select_checked = array();
+			$multi_select_checked                    = array();
 			$multi_select_checked['opd_is_favorite'] = $is_favorite;
-			$multi_select_checked['opd_color'] = $colors;
-			$multi_select_checked['opd_clr'] = $color;
-			$multi_select_checked['opd_fav_color'] = $fav_color;
+			$multi_select_checked['opd_color']       = $colors;
+			$multi_select_checked['opd_clr']         = $color;
+			$multi_select_checked['opd_fav_color']   = $fav_color;
 			$multi_select_checked['opd_multi_color'] = $multi_color;
 			
 			update_post_meta( $post_id, '_opd_text_field', $text_field );
@@ -139,7 +164,8 @@ EOD;
 			}*/
 			foreach ( $colors as $key => $color ) {
 				$color        = ucwords( $color );
-				$checked      = is_array( $save_colors['opd_color'] ) && in_array( $key, $save_colors['opd_color'] ) ? 'checked' : '';
+				$checked      = is_array( $save_colors['opd_color'] ) && in_array( $key,
+					$save_colors['opd_color'] ) ? 'checked' : '';
 				$metabox_html .= <<<EOD
          
                 <input type="checkbox" name="opdmeta[opd_color][]" id="opd_color_{$color}" value="{$key}" {$checked}>
@@ -198,7 +224,8 @@ EOD;
 			$dropdown_html = '<option value="0">' . __( "Select a colors", "optionsdemo" ) . '</option>';
 			foreach ( $colors as $key => $color ) {
 				$selected = '';
-				if ( is_array( $multi_color['opd_multi_color'] ) && in_array( $key, $multi_color['opd_multi_color'] ) ) {
+				if ( is_array( $multi_color['opd_multi_color'] ) && in_array( $key,
+						$multi_color['opd_multi_color'] ) ) {
 					$selected = 'selected';
 				}
 				$dropdown_html .= sprintf( '<option value="%s" %s>%s</option>', $key, $selected, $color );
@@ -216,8 +243,31 @@ EOD;
 			echo $metabox_html;
 		}
 		//End method opd_display_meta_field_location
+		
+		
+		/**
+		 * Meta Box callback function for rendering Image field output
+		 *
+		 * @param $post
+		 */
+		public function opd_display_meta_img_field_location( $post ) {
+			$post_id      = $post->ID;
+			$opd_img      = get_post_meta( $post_id, '_opd_img_id_url', true );
+			$metabox_html = <<<EOD
+			<div>
+				<button class="button" id="upload_image">Upload Image</button>
+				<input type="hidden" name="opdimg[opd_image_id]" id="opd_image_id" value="{$opd_img['opd_image_id']}" >
+				<input type="hidden" name="opdimg[opd_image_url]" id="opd_image_url" value="{$opd_img['opd_image_url']}" >
+				<div class="border" style="width:100%;height:auto;" id="image_container"></div>
+			</div>
+EOD;
+			echo $metabox_html;
+			
+		}
+		//End method opd_display_meta_img_field_location
+		
+		
 	}
-	
 	// End Class MetaBox
 	
 	new MetaBox();

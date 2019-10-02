@@ -45,7 +45,6 @@
 				)
 			);
 		}
-		
 		//End method opd_custom_post_type
 		
 		
@@ -56,6 +55,7 @@
 			require( "inc/Metabox.php" );
 			require( "inc/SettingOptions.php" );
 		}
+		//End method ClassInitiate
 		
 		
 		/**
@@ -70,15 +70,18 @@
 		 * Enqueue admin assets
 		 */
 		public function optionsdemo_assets() {
+			global $post_type;
 			$page = isset( $_REQUEST['page'] ) ? esc_attr( wp_unslash( $_REQUEST['page'] ) ) : '';
 			
-			if ( $page == 'optionsdemo' ) {
+			
+			if ( $page == 'optionsdemo' || $post_type == 'optiondemo' ) {
 				wp_enqueue_media();
 				wp_enqueue_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
 					array( 'jquery' ), '1.0.0', true );
 			}
 		}
 		// End method optionsdemo_assets
+		
 		
 	}//end OptionDemo_Setting_Page class
 	

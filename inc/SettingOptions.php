@@ -4,7 +4,7 @@
 	 * Kick-in Class SettingOptions
 	 */
 	class SettingOptions {
-	 
+		
 		/**
 		 * SettingOptions constructor.
 		 */
@@ -30,15 +30,13 @@
 			//add submenu to custom post
 			add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $slug, $callback );
 		}
-		
 		//End method optionsdemo_create_settings
 		
 		
 		/**
 		 * Option page callback function
 		 */
-		public
-		function optionsdemo_settings_content() { ?>
+		public function optionsdemo_settings_content() { ?>
             <div class="wrap">
                 <div id="icon-themes" class="icon32"><br/></div>
                 <h1>Options Demo</h1>
@@ -53,29 +51,24 @@
                 </form>
             </div>
 		<?php }
-		
 		//end method optionsdemo_settings_content
 		
 		
 		/**
 		 * Initial Section
 		 */
-		public
-		function optionsdemo_setup_sections() {
+		public function optionsdemo_setup_sections() {
 			add_settings_section( "optionsdemo_section", esc_html__( "Section Title One", "optionsdemo" ), array(),
 				"optionsdemo_general" );
 			
 		}
-		
 		//end method optionsdemo_setup_sections
 		
 		
 		/**
 		 * Initial setting field
 		 */
-		
-		public
-		function optionsdemo_setup_fields() {
+		public function optionsdemo_setup_fields() {
 			
 			$fields = array(
 				array(
@@ -224,7 +217,6 @@
 			//Setting Register
 			register_setting( 'optionsdemo_general', 'optionsdemo_general' );
 		}
-		
 		//End method optionsdemo_setup_fields
 		
 		
@@ -233,10 +225,7 @@
 		 *
 		 * @param $field
 		 */
-		public
-		function optionsdemo_field_callback(
-			$field
-		) {
+		public function optionsdemo_field_callback( $field ) {
 			$option_name = $field['option_name'];
 			$option      = get_option( $option_name );
 			$value       = isset( $option[ $field['id'] ] ) ? $option[ $field['id'] ] : '';
@@ -422,6 +411,10 @@
 			//End Switch case
 		}
 		// End method optionsdemo_field_callback
+		
+		
 	}
+	
+	//End Class SettingOptions
 	
 	new SettingOptions();
