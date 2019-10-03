@@ -22,6 +22,7 @@
 		 */
 		public function __construct() {
 			add_action( 'init', array( $this, 'opd_custom_post_type' ) );
+			add_action( 'init', array( $this, 'opd_register_taxonomy_course' ) );
 			add_action( 'init', array( $this, 'ClassInitiate' ) );
 			add_action( 'plugins_loaded', array( $this, 'optionsdemo_load_textdomain' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'optionsdemo_assets' ) );
@@ -45,8 +46,36 @@
 				)
 			);
 		}
+		
 		//End method opd_custom_post_type
 		
+		
+		public function opd_register_taxonomy_course() {
+			
+			$labels = [
+				'name'              => __( 'Courses', 'optionsdemo' ),
+				'singular_name'     => __( 'Course', 'optionsdemo' ),
+				'search_items'      => __( 'Search Courses' ),
+				'all_items'         => __( 'All Courses' ),
+				'parent_item'       => __( 'Parent Course' ),
+				'parent_item_colon' => __( 'Parent Course:' ),
+				'edit_item'         => __( 'Edit Course' ),
+				'update_item'       => __( 'Update Course' ),
+				'add_new_item'      => __( 'Add New Course' ),
+				'new_item_name'     => __( 'New Course Name' ),
+				'menu_name'         => __( 'Course' ),
+			];
+			$args   = [
+				'hierarchical'      => true,
+				'labels'            => $labels,
+				'show_ui'           => true,
+				'show_admin_cloumn' => true,
+				'query_var'         => true,
+				'rewrite'           => [ 'slug' => 'course' ],
+			];
+			
+			register_taxonomy( 'course', [ 'optiondemo' ], $args );
+		}
 		
 		/**
 		 * Class Initiate
