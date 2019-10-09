@@ -50,6 +50,9 @@
 		//End method opd_custom_post_type
 		
 		
+		/**
+		 * Taxonomy "Course Added"
+		 */
 		public function opd_register_taxonomy_course() {
 			
 			$labels = [
@@ -76,6 +79,8 @@
 			
 			register_taxonomy( 'course', [ 'optiondemo' ], $args );
 		}
+		//End method opd_register_taxonomy_course
+		
 		
 		/**
 		 * Class Initiate
