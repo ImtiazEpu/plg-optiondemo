@@ -38,11 +38,52 @@
 		
 		
 		/**
+		 * Initial Secured method
+		 *
+		 * @param $nonce_field
+		 * @param $action
+		 * @param $post_id
+		 *
+		 * @return bool
+		 */
+		private function is_secured( $nonce_field, $action, $post_id ) {
+			
+			$nonce = isset( $_POST[ $nonce_field ] ) ? $_POST[ $nonce_field ] : '';
+			
+			if ( $nonce == '' ) {
+				return false;
+			}
+			if ( ! wp_verify_nonce( $nonce, $action ) ) {
+				return false;
+			}
+			if ( ! current_user_can( $post_id, 'edit.php' ) ) {
+				return false;
+			}
+			if ( wp_is_post_autosave( $post_id ) ) {
+				return false;
+			}
+			if ( wp_is_post_revision( $post_id ) ) {
+				return false;
+			}
+			
+			return true;
+		}
+		// End private method is_secured
+		
+		
+		/**
 		 * Save image meta value
 		 *
 		 * @param $post_id
+		 *
+		 * @return mixed
 		 */
 		public function opd_save_img_metabox( $post_id ) {
+			
+			if ( ! $this->is_secured( 'opd_meta_field', 'meta_field', $post_id ) ) {
+				return $post_id;
+			}
+			
 			$opdimg      = isset( $_POST['opdimg'] ) ? $_POST['opdimg'] : array();
 			$opd_img_id  = isset( $opdimg['opd_image_id'] ) ? $opdimg['opd_image_id'] : '';
 			$opd_img_url = isset( $opdimg['opd_image_url'] ) ? $opdimg['opd_image_url'] : '';
@@ -53,6 +94,7 @@
 			
 			update_post_meta( $post_id, '_opd_img_id_url', $opdimg_id_url );
 		}
+		// End method opd_save_img_metabox
 		
 		
 		/**
@@ -63,6 +105,11 @@
 		 * @return mixed
 		 */
 		public function opd_save_metabox( $post_id ) {
+			
+			if ( ! $this->is_secured( 'opd_meta_field', 'meta_field', $post_id ) ) {
+				return $post_id;
+			}
+			
 			$opdonmeta   = isset( $_POST['opdmeta'] ) ? $_POST['opdmeta'] : array();
 			$text_field  = isset( $opdonmeta['opd_text'] ) ? $opdonmeta['opd_text'] : '';
 			$email_field = isset( $opdonmeta['opd_email'] ) ? $opdonmeta['opd_email'] : '';
@@ -130,6 +177,7 @@
 				'black'
 			];
 			$checked = $is_favorite['opd_is_favorite'] == 1 ? 'checked' : '';
+			wp_nonce_field( 'meta_field', 'opd_meta_field' );
 			
 			$metabox_html = <<<EOD
 			<!--Text field-->
@@ -268,6 +316,7 @@ EOD;
 		
 		
 	}
+	
 	// End Class MetaBox
 	
 	new MetaBox();
