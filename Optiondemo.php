@@ -83,11 +83,15 @@
 		
 		
 		/**
-		 * Class Initiate
+		 * Load Metabox & setting options
 		 */
 		public function ClassInitiate() {
-			require( "inc/Metabox.php" );
-			require( "inc/SettingOptions.php" );
+			if (file_exists(dirname(__FILE__).'/inc/MetaBox.php')) {
+				require_once( dirname(__FILE__).'/inc/MetaBox.php' );
+			}
+			if (file_exists(dirname(__FILE__).'/inc/SettingOptions.php')) {
+				require_once( dirname(__FILE__).'/inc/SettingOptions.php' );
+			}
 		}
 		//End method ClassInitiate
 		
