@@ -109,9 +109,12 @@
 			
 			
 			if ( $page == 'optionsdemo' || $post_type == 'optiondemo' ) {
+				
 				wp_enqueue_media();
+				wp_enqueue_style('jquery-ui-css','//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css',null,time());
+				
 				wp_enqueue_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
-					array( 'jquery' ), '1.0.0', true );
+					array( 'jquery','jquery-ui-datepicker' ), time(), true );
 			}
 		}
 		// End method optionsdemo_assets

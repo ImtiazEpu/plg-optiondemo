@@ -56,7 +56,7 @@
 			if ( ! wp_verify_nonce( $nonce, $action ) ) {
 				return false;
 			}
-			if ( ! current_user_can( $post_id, 'edit.php' ) ) {
+			if ( ! current_user_can( 'edit.php', $post_id ) ) {
 				return false;
 			}
 			if ( wp_is_post_autosave( $post_id ) ) {
@@ -66,7 +66,6 @@
 				return false;
 			}
 			
-			return true;
 		}
 		// End private method is_secured
 		
@@ -80,9 +79,9 @@
 		 */
 		public function opd_save_img_metabox( $post_id ) {
 			
-			if ( ! $this->is_secured( 'opd_meta_field', 'meta_field', $post_id ) ) {
+			/*if ( ! $this->is_secured( 'opd_meta_field', 'meta_field', $post_id ) ) {
 				return $post_id;
-			}
+			}*/
 			
 			$opdimg      = isset( $_POST['opdimg'] ) ? $_POST['opdimg'] : array();
 			$opd_img_id  = isset( $opdimg['opd_image_id'] ) ? $opdimg['opd_image_id'] : '';
@@ -106,13 +105,14 @@
 		 */
 		public function opd_save_metabox( $post_id ) {
 			
-			if ( ! $this->is_secured( 'opd_meta_field', 'meta_field', $post_id ) ) {
+			/*if ( ! $this->is_secured( 'opd_meta_field', 'meta_field', $post_id ) ) {
 				return $post_id;
-			}
+			}*/
 			
 			$opdonmeta   = isset( $_POST['opdmeta'] ) ? $_POST['opdmeta'] : array();
 			$text_field  = isset( $opdonmeta['opd_text'] ) ? $opdonmeta['opd_text'] : '';
 			$email_field = isset( $opdonmeta['opd_email'] ) ? $opdonmeta['opd_email'] : '';
+			$date_field  = isset( $opdonmeta['opd_date'] ) ? $opdonmeta['opd_date'] : '';
 			$is_favorite = isset( $opdonmeta['opd_is_favorite'] ) ? $opdonmeta['opd_is_favorite'] : 0;
 			$colors      = isset( $opdonmeta['opd_color'] ) ? $opdonmeta['opd_color'] : array();
 			$color       = isset( $opdonmeta['opd_clr'] ) ? $opdonmeta['opd_clr'] : '';
@@ -132,6 +132,7 @@
 			
 			update_post_meta( $post_id, '_opd_text_field', $text_field );
 			update_post_meta( $post_id, '_opd_email_field', $email_field );
+			update_post_meta( $post_id, '_opd_date_field', $date_field );
 			//update_post_meta( $post_id, '_opd_is_favorite', $is_favorite );
 			//update_post_meta( $post_id, '_opd_color', $colors );
 			//update_post_meta( $post_id, '_opd_clr', $color );
@@ -154,6 +155,7 @@
 			
 			$text_field  = get_post_meta( $post_id, '_opd_text_field', true );
 			$email_field = get_post_meta( $post_id, '_opd_email_field', true );
+			$date_field  = get_post_meta( $post_id, '_opd_date_field', true );
 			$is_favorite = get_post_meta( $post_id, '_opd_select_checked', true );
 			$save_colors = get_post_meta( $post_id, '_opd_select_checked', true );
 			$save_color  = get_post_meta( $post_id, '_opd_select_checked', true );
@@ -166,8 +168,9 @@
 			$color_label    = __( 'Colors', 'optionsdemo' );
 			$select_color   = __( 'Favorite Color', 'optionsdemo' );
 			$select_colors  = __( 'Favorite Colors', 'optionsdemo' );
+			$date_label     = __( 'Years', 'optionsdemo' );
 			
-			$colors  = [
+			$colors = [
 				'red',
 				'green',
 				'blue',
@@ -176,7 +179,9 @@
 				'pink',
 				'black'
 			];
-			$checked = $is_favorite['opd_is_favorite'] == 1 ? 'checked' : '';
+			
+			$checked = ( isset( $is_favorite['opd_is_favorite'] ) && intval( $is_favorite['opd_is_favorite'] ) == 1 ) ? 'checked' : '';
+			
 			wp_nonce_field( 'meta_field', 'opd_meta_field' );
 			
 			$metabox_html = <<<EOD
@@ -192,6 +197,11 @@
                 <input type="email" name="opdmeta[opd_email]" id="opd_email" value="{$email_field}">
             </p>
             <br/>
+            <p>
+                <label for="opd_date">{$date_label}:</label>
+                
+                <input type="text" name="opdmeta[opd_date]" id="opd_date" value="{$date_field}" placeholder="mm/dd/yy">
+            </p>
             <!--checkbox field-->
             <p>
                 <label for="opd_is_favorite">{$checkbox_label}:</label>
@@ -211,13 +221,13 @@ EOD;
 				$save_colors = array();
 			}*/
 			foreach ( $colors as $key => $color ) {
-				$color        = ucwords( $color );
+				$_color       = ucwords( $color );
 				$checked      = is_array( $save_colors['opd_color'] ) && in_array( $key,
 					$save_colors['opd_color'] ) ? 'checked' : '';
 				$metabox_html .= <<<EOD
          
-                <input type="checkbox" name="opdmeta[opd_color][]" id="opd_color_{$color}" value="{$key}" {$checked}>
-                <label for="opd_color_{$color}">{$color}</label>
+                <input type="checkbox" name="opdmeta[opd_color][]" id="opd_color_{$_color}" value="{$key}" {$checked}>
+                <label for="opd_color_{$_color}">{$_color}</label>
 EOD;
 			}
 			
