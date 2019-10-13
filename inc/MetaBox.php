@@ -13,6 +13,7 @@
 			add_action( 'admin_menu', array( $this, 'opd_add_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_img_metabox' ) );
+			add_action( 'save_post', array( $this, 'opd_save_gallery_metabox' ) );
 		}
 		//End method constructor
 		
@@ -31,6 +32,12 @@
 				'opd_meta_img_field',
 				__( 'Image Field', 'optionsdemo' ),
 				array( $this, 'opd_display_meta_img_field_location' ),
+				array( 'optiondemo' )
+			);
+			add_meta_box(
+				'opd_gallery_info',
+				__( 'Gallery Info', 'optionsdemo' ),
+				array( $this, 'opd_gallery_info' ),
 				array( 'optiondemo' )
 			);
 		}
@@ -93,8 +100,25 @@
 			
 			update_post_meta( $post_id, '_opd_img_id_url', $opdimg_id_url );
 		}
+		
 		// End method opd_save_img_metabox
 		
+		
+		/**
+		 * @param $post_id
+		 */
+		public function opd_save_gallery_metabox( $post_id ) {
+			$opdimgs      = isset( $_POST['opdimgs'] ) ? $_POST['opdimgs'] : array();
+			$opd_imgs_id  = isset( $opdimgs['opd_images_id'] ) ? $opdimgs['opd_images_id'] : '';
+			$opd_imgs_url = isset( $opdimgs['opd_images_url'] ) ? $opdimgs['opd_images_url'] : '';
+			
+			$opdimgs_id_url                   = array();
+			$opdimgs_id_url['opd_images_id']  = $opd_imgs_id;
+			$opdimgs_id_url['opd_images_url'] = $opd_imgs_url;
+			
+			update_post_meta( $post_id, '_opd_gallery_id_url', $opdimgs_id_url );
+		}
+		//End method opd_save_gallery_metabox
 		
 		/**
 		 * Save meta value
@@ -209,9 +233,6 @@
                 <input type="checkbox" name="opdmeta[opd_is_favorite]" id="opd_is_favorite" value="1" {$checked}>
             </p>
 <br/>
-
-
-
 	<!--Multiple check fields-->
 <p>
 <label>{$color_label}: </label>
@@ -320,9 +341,29 @@ EOD;
 			</div>
 EOD;
 			echo $metabox_html;
-			
 		}
 		//End method opd_display_meta_img_field_location
+		
+		
+		/**
+		 * Meta Box callback function for rendering Image gallery field output
+		 *
+		 * @param $post
+		 */
+		public function opd_gallery_info( $post ) {
+			$post_id      = $post->ID;
+			$opd_imgs     = get_post_meta( $post_id, '_opd_gallery_id_url', true );
+			$metabox_html = <<<EOD
+			<div>
+				<button class="button" id="upload_images">Upload Images</button>
+				<input type="hidden" name="opdimgs[opd_images_id]" id="opd_images_id" value="{$opd_imgs['opd_images_id']}" >
+				<input type="hidden" name="opdimgs[opd_images_url]" id="opd_images_url" value="{$opd_imgs['opd_images_url']}" >
+				<div class="border" style="width:100%;height:auto;" id="images_container"></div>
+			</div>
+EOD;
+			echo $metabox_html;
+		}
+		//Emd Method opd_gallery_info
 		
 		
 	}
