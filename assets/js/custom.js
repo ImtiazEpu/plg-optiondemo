@@ -1,6 +1,11 @@
 ;(function ($) {
     $(document).ready(function () {
 
+        /*
+       * Multiple image field
+       * ================
+       * */
+
         $('.optionsdemo-warp').on('click', '.button-primary', function (e) {
             e.preventDefault();
 
@@ -53,16 +58,25 @@
 
             mediaUploader.open();
             return false;
-        });
+        });//End multiple image field
 
+
+        /*
+       * Datepicker
+       * ================
+       * */
         $('#opd_date').datepicker(
             {
                 changeMonth: true,
                 changeYear: true
             }
-        );
-    });
-    $(document).ready(function () {
+        );//End datepicker
+
+
+        /*
+       * Gallery
+       * ================
+       * */
         var images_url = $("#opd_images_url").val();
         images_url = images_url ? images_url.split(";") : [];
 
@@ -103,22 +117,27 @@
 
             });
 
-
             mediaUploader.open();
             return false;
-        });
+        });//End gallery
 
-        $( '#add-row' ).on('click', function() {
-            var row = $( '.empty-row.screen-reader-text' ).clone(true);
-            row.removeClass( 'empty-row screen-reader-text' );
-            row.insertBefore( '#repeatable-fieldset-one tbody>tr:last' );
+
+        /*
+        * Repeatable field
+        * ================
+        * */
+        $('#add-row').on('click', function () {
+            var row = $('.empty-row.screen-reader-text').clone(true);
+            row.removeClass('empty-row screen-reader-text');
+            row.insertBefore('#repeatable-fieldset-one tbody>tr:last');
             return false;
         });
 
-        $( '.remove-row' ).on('click', function() {
+        $('.remove-row').on('click', function () {
             $(this).parents('tr').remove();
             return false;
-        });
+        });//End repeatable field
+
     });
 })(jQuery);
 
