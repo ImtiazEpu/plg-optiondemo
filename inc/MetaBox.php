@@ -14,6 +14,7 @@
 			add_action( 'save_post', array( $this, 'opd_save_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_img_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_gallery_metabox' ) );
+			add_filter('user_contactmethods',array($this,'opd_user_contact_methods'));
 		}
 		//End method constructor
 		
@@ -364,6 +365,23 @@ EOD;
 			echo $metabox_html;
 		}
 		//Emd Method opd_gallery_info
+		
+		
+		/**
+		 * Add user social contact info
+		 *
+		 * @param $method
+		 *
+		 * @return mixed
+		 */
+		public function opd_user_contact_methods( $method ) {
+			$method['facebook'] = __('Facebook', 'optionsdemo');
+			$method['twitter'] = __('Twitter', 'optionsdemo');
+			$method['linkedin'] = __('Linkedin', 'optionsdemo');
+			
+			return $method;
+		}
+		//End method opd_user_contact_methods
 		
 		
 	}
