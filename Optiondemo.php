@@ -115,6 +115,7 @@
 			if ( $page == 'optionsdemo' || $post_type == 'optiondemo' ) {
 				
 				wp_enqueue_media();
+				wp_enqueue_style('jquery-ui-css','//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',null,time());
 				wp_enqueue_style('jquery-ui-css','//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css',null,time());
 				
 				wp_enqueue_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),

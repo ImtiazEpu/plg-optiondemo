@@ -14,7 +14,8 @@
 			add_action( 'save_post', array( $this, 'opd_save_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_img_metabox' ) );
 			add_action( 'save_post', array( $this, 'opd_save_gallery_metabox' ) );
-			add_filter('user_contactmethods',array($this,'opd_user_contact_methods'));
+			
+			add_filter( 'user_contactmethods', array( $this, 'opd_user_contact_methods' ) );
 		}
 		//End method constructor
 		
@@ -39,6 +40,12 @@
 				'opd_gallery_info',
 				__( 'Gallery Info', 'optionsdemo' ),
 				array( $this, 'opd_gallery_info' ),
+				array( 'optiondemo' )
+			);
+			add_meta_box(
+				'repeatable_fields',
+				__( 'Repeatable field', 'optiondemo' ),
+				array( $this, 'opd_repeatable_meta_fields_display' ),
 				array( 'optiondemo' )
 			);
 		}
@@ -375,15 +382,73 @@ EOD;
 		 * @return mixed
 		 */
 		public function opd_user_contact_methods( $method ) {
-			$method['facebook'] = __('Facebook', 'optionsdemo');
-			$method['twitter'] = __('Twitter', 'optionsdemo');
-			$method['linkedin'] = __('Linkedin', 'optionsdemo');
+			$method['facebook'] = __( 'Facebook', 'optionsdemo' );
+			$method['twitter']  = __( 'Twitter', 'optionsdemo' );
+			$method['linkedin'] = __( 'Linkedin', 'optionsdemo' );
 			
 			return $method;
 		}
+		
 		//End method opd_user_contact_methods
 		
 		
+		/**
+		 * Repeatable field display
+		 */
+		public function opd_repeatable_meta_fields_display() {
+			?>
+            <table id="repeatable-fieldset-one" width="100%">
+                <thead>
+                <tr>
+                    <th width="33%">Name</th>
+                    <th width="20%">Select</th>
+                    <th width="33%">Url</th>
+                    <th width="8%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="padding-right:10px"><input class="form-control form-control-lg" type="text" name="url"
+                                                          placeholder="Your Name"></td>
+                    <td style="padding-right:10px">
+                        <select style="height: calc(1.5em + 1rem + 2px);" class="form-control form-control-lg"
+                                name="select">
+                            <option value="">Red</option>
+                            <option value="">Green</option>
+                            <option value="">Blue</option>
+                            <option value="">Black</option>
+                            <option value="">White</option>
+                        </select>
+                    </td>
+                    <td style="padding-right:10px"><input class="form-control form-control-lg" type="text" name="url"
+                                                          placeholder="Website"></td>
+                    <td><a class="btn btn-danger remove-row" href="">Remove</a></td>
+                </tr>
+                <tr class="empty-row screen-reader-text">
+                    <td style="padding-right:10px"><input class="form-control form-control-lg" type="text" name="url"
+                                                          placeholder="Your Name"></td>
+                    <td style="padding-right:10px">
+                        <select style="height: calc(1.5em + 1rem + 2px);" class="form-control form-control-lg"
+                                name="select">
+                            <option value="">Red</option>
+                            <option value="">Green</option>
+                            <option value="">Blue</option>
+                            <option value="">Black</option>
+                            <option value="">White</option>
+                        </select>
+                    </td>
+                    <td style="padding-right:10px"><input class="form-control form-control-lg" type="text" name="url"
+                                                          placeholder="Website"></td>
+                    <td><a class="btn btn-danger remove-row" href="">Remove</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <p style="padding-top:10px"><a id="add-row" class="btn btn-success" href="#">Add New</a></p>
+			<?php
+		}
+		//End method opd_repeatable_meta_fields_display
+  
+  
 	}
 	
 	// End Class MetaBox
