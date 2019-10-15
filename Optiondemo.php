@@ -92,6 +92,9 @@
 			if (file_exists(dirname(__FILE__).'/inc/SettingOptions.php')) {
 				require_once( dirname(__FILE__).'/inc/SettingOptions.php' );
 			}
+			if (file_exists(dirname(__FILE__).'/inc/UsersProfile.php')) {
+				require_once( dirname(__FILE__).'/inc/UsersProfile.php' );
+			}
 		}
 		//End method ClassInitiate
 		
