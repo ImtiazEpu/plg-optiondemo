@@ -21,7 +21,7 @@
 		
 		
 		/**
-		 * Add metabox
+		 * The Add action
 		 */
 		public function opd_add_metabox() {
 			add_meta_box(
@@ -86,7 +86,7 @@
 		
 		
 		/**
-		 * Save image meta value
+		 * The save action for image
 		 *
 		 * @param $post_id
 		 *
@@ -113,6 +113,8 @@
 		
 		
 		/**
+		 * The save action for gallery
+		 *
 		 * @param $post_id
 		 */
 		public function opd_save_gallery_metabox( $post_id ) {
@@ -129,7 +131,7 @@
 		//End method opd_save_gallery_metabox
 		
 		/**
-		 * Save meta value
+		 * The save action for meta field
 		 *
 		 * @param $post_id
 		 *
@@ -219,31 +221,33 @@
 			$metabox_html = <<<EOD
 			<!--Text field-->
             <p>
-                <label for="opd_text">{$text_label}:</label>
-                <input type="text" name="opdmeta[opd_text]" id="opd_text" value="{$text_field}">
+                <label for="opd_text"><strong>{$text_label}:</strong></label>
+                <input type="text" class="form-control" name="opdmeta[opd_text]" id="opd_text" value="{$text_field}">
             </p>
             <br/>
             <!--email field-->
             <p>
-                <label for="opd_email">{$email_label}:</label>
-                <input type="email" name="opdmeta[opd_email]" id="opd_email" value="{$email_field}">
+                <label for="opd_email"><strong>{$email_label}:</strong></label>
+                <input type="email" class="form-control" name="opdmeta[opd_email]" id="opd_email" value="{$email_field}">
             </p>
             <br/>
             <p>
-                <label for="opd_date">{$date_label}:</label>
+                <label for="opd_date"><strong>{$date_label}:</strong></label>
                 
-                <input type="text" name="opdmeta[opd_date]" id="opd_date" value="{$date_field}" placeholder="mm/dd/yy">
+                <input type="text" class="form-control" name="opdmeta[opd_date]" id="opd_date" value="{$date_field}" placeholder="mm/dd/yy">
             </p>
             <!--checkbox field-->
+            <div class="form-check form-check-inline">
             <p>
-                <label for="opd_is_favorite">{$checkbox_label}:</label>
+                <label class="form-check-label" for="opd_is_favorite"><strong>{$checkbox_label}:</strong></label>
                 
-                <input type="checkbox" name="opdmeta[opd_is_favorite]" id="opd_is_favorite" value="1" {$checked}>
-            </p>
+                <input  class="form-check-input form-control" type="checkbox" name="opdmeta[opd_is_favorite]" id="opd_is_favorite" value="1" {$checked}>
+                </p>
+            </div>
 <br/>
 	<!--Multiple check fields-->
 <p>
-<label>{$color_label}: </label>
+<label><strong>{$color_label}:</strong> </label>
 EOD;
 			
 			/*if ( ! is_array( $save_colors ) ) {
@@ -254,9 +258,10 @@ EOD;
 				$checked      = is_array( $save_colors['opd_color'] ) && in_array( $key,
 					$save_colors['opd_color'] ) ? 'checked' : '';
 				$metabox_html .= <<<EOD
-         
-                <input type="checkbox" name="opdmeta[opd_color][]" id="opd_color_{$_color}" value="{$key}" {$checked}>
-                <label for="opd_color_{$_color}">{$_color}</label>
+                 <div class="form-check form-check-inline">
+                    <input class="form-check-input form-control" type="checkbox" name="opdmeta[opd_color][]" id="opd_color_{$_color}" value="{$key}" {$checked}>
+                    <label class="form-check-label" for="opd_color_{$_color}">{$_color}</label>
+                </div>
 EOD;
 			}
 			
@@ -268,7 +273,7 @@ EOD;
 			$metabox_html .= <<<EOD
 			<br/>
 <p>
-<label>{$color_label}: </label>
+<label><strong>{$color_label}:</strong> </label>
 EOD;
 			
 			foreach ( $colors as $color ) {
@@ -276,18 +281,19 @@ EOD;
 				$checked      = ( $color == $save_color['opd_clr'] ) ? "checked='checked'" : '';
 				$metabox_html .= <<<EOD
          
-                
-                <input type="radio" name="opdmeta[opd_clr]" id="opd_clr_{$color}" value="{$color}" {$checked}>
-                <label for="opd_clr_{$color}">{$color} </label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="opdmeta[opd_clr]" id="opd_clr_{$color}" value="{$color}" {$checked}>
+                    <label class="form-check-label" for="opd_clr_{$color}">{$color} </label>
+                </div>
 EOD;
 			}
 			$metabox_html .= "</p>";
 			
 			
 			//Select Field
-			
 			$dropdown_html = '<option value="0">' . __( "Select a color", "optionsdemo" ) . '</option>';
 			foreach ( $colors as $color ) {
+				$color    = ucwords( $color );
 				$selected = '';
 				if ( $color == $fav_color['opd_fav_color'] ) {
 					$selected = 'selected';
@@ -298,8 +304,8 @@ EOD;
 			$metabox_html .= <<<EOD
 			<br/>
 			<p>
-				<label for="opd_fav_color">{$select_color}</label>
-				<select name="opdmeta[opd_fav_color]" id="opd_fav_color">
+				<label for="opd_fav_color"><strong>{$select_color}</strong></label>
+				<select style="height: calc(1.5em + 1rem + 2px);" class="form-control" name="opdmeta[opd_fav_color]" id="opd_fav_color">
 				{$dropdown_html}
 				</select>
 			</p>
@@ -310,6 +316,7 @@ EOD;
 			
 			$dropdown_html = '<option value="0">' . __( "Select a colors", "optionsdemo" ) . '</option>';
 			foreach ( $colors as $key => $color ) {
+				$color    = ucwords( $color );
 				$selected = '';
 				if ( is_array( $multi_color['opd_multi_color'] ) && in_array( $key,
 						$multi_color['opd_multi_color'] ) ) {
@@ -321,8 +328,8 @@ EOD;
 			$metabox_html .= <<<EOD
 			<br/>
 			<p>
-				<label for="opd_multi_color">{$select_colors}</label>
-				<select name="opdmeta[opd_multi_color][]" id="opd_multi_color" multiple>
+				<label for="opd_multi_color"><strong>{$select_colors}</strong></label>
+				<select class="form-control" name="opdmeta[opd_multi_color][]" id="opd_multi_color" multiple>
 				{$dropdown_html}
 				</select>
 			</p>
@@ -447,8 +454,8 @@ EOD;
 			<?php
 		}
 		//End method opd_repeatable_meta_fields_display
-  
-  
+		
+		
 	}
 	
 	// End Class MetaBox
