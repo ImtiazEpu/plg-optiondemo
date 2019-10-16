@@ -9,7 +9,7 @@
 		
 		public function __construct() {
 			
-			//add_action( 'init', array( $this, 'add_new_role_cap' ) );
+			add_action( 'admin_init', array( $this, 'add_new_role_cap' ) );
 			// add the field to user's own profile editing screen
 			add_action( 'edit_user_profile', array( $this, 'opd_usermeta_form_field_birthday' ) );
 			
@@ -24,35 +24,21 @@
 		}
 		
 		
-		/*public function add_new_role_cap() {
-			add_role( 'plugin_managers', __( 'Plugin manager' ), array(
-			
+		public function add_new_role_cap() {
+			$result = add_role( 'plugin_manage', __( 'Plugin manager' ), array(
+				'read'         => true,
+				'upload_files' => true
 			) );
-		}*/
+		}
 		
 		public function opd_usermeta_form_field_birthday( $user ) {
 			?>
             <h3>It's Your Birthday</h3>
-            <table class="form-table">
-                <tr>
-                    <th>
-                        <label for="birthday">Birthday</label>
-                    </th>
-                    <td>
-                        <input type="date"
-                               class="regular-text ltr"
-                               id="birthday"
-                               name="birthday"
-                               value="<?= esc_attr( get_user_meta( $user->ID, 'birthday', true ) ); ?>"
-                               title="Please use YYYY-MM-DD as the date format."
-                               pattern="(19[0-9][0-9]|20[0-9][0-9])-(1[0-2]|0[1-9])-(3[01]|[21][0-9]|0[1-9])"
-                               required>
-                        <p class="description">
-                            Please enter your birthday date.
-                        </p>
-                    </td>
-                </tr>
-            </table>
+            <p>
+                <label for="opd_date">Birthday</label>
+
+                <input type="text" name="birthday" id="opd_date" value="<?= esc_attr( get_user_meta( $user->ID, 'birthday', true ) ); ?>" placeholder="mm/dd/yy" title="Please use YYYY-MM-DD as the date format.">
+            </p>
 			<?php
 		}
 		
