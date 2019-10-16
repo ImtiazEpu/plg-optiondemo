@@ -112,13 +112,19 @@
 		 */
 		public function optionsdemo_assets() {
 			global $post_type;
+			global $pagenow;
 			$page = isset( $_REQUEST['page'] ) ? esc_attr( wp_unslash( $_REQUEST['page'] ) ) : '';
 			
 			
-			if ( $page == 'optionsdemo' || $post_type == 'optiondemo' ) {
+			if ( $page == 'optionsdemo' || $post_type == 'optiondemo'  ) {
 				
 				wp_enqueue_media();
-				wp_enqueue_style('jquery-ui-css','//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',null,time());
+				wp_enqueue_style('bootstrap-css','//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',null,time());
+				wp_enqueue_style('jquery-ui-css','//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css',null,time());
+				
+				wp_enqueue_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
+					array( 'jquery','jquery-ui-datepicker' ), time(), true );
+			}elseif( $pagenow == 'profile.php'){
 				wp_enqueue_style('jquery-ui-css','//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css',null,time());
 				
 				wp_enqueue_script( 'customscript-js', plugins_url( '/assets/js/custom.js', __FILE__ ),
